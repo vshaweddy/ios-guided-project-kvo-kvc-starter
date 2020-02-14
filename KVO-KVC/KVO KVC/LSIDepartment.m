@@ -30,8 +30,12 @@
 }
 
 - (NSArray<LSIEmployee *> *)employees {
-    return [[self.internalEmployees copy] arrayByAddingObject:self.manager];
+    return [self.internalEmployees arrayByAddingObject:self.manager];
 }
+
+//- (NSArray<LSIEmployee *> *)employees {
+//    return [[self.internalEmployees copy] arrayByAddingObject:self.manager];
+//}
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"Department: %@\n\tManager: %@\n\tEmployees: %@", self.name, self.manager, self.employees];
