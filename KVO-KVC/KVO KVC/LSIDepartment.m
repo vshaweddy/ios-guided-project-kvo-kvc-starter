@@ -33,6 +33,8 @@
     return [self.internalEmployees arrayByAddingObject:self.manager];
 }
 
+
+// redundant
 //- (NSArray<LSIEmployee *> *)employees {
 //    return [[self.internalEmployees copy] arrayByAddingObject:self.manager];
 //}

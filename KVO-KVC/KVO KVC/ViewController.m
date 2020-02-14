@@ -65,7 +65,7 @@
     [controller addDepartment:marketing];
     self.hrController = controller;
     
-//    NSLog(@"%@", self.hrController);
+    NSLog(@"Result: %@", self.hrController);
     
     
     // Key Value Coding: KVC
@@ -84,60 +84,79 @@
     // 1. init/dealloc always use: _name =
     // 2. Normal methods always use: self.name =
     
+    NSString *key = @"salary";
+    
+    [craig setValue:@(42 + 5) forKey:key];
+    
     // Property accessor (method call or the property dot syntax
     NSString *name = [craig name]; // craign.name; // compile time checking for valid properties
     NSLog(@"Name: %@", name);
     
+    NSString *value = [craig valueForKey:key];
+    NSLog(@"Value for key %@: %@", key, value);
+    
+//    LSIEmployee *employee = self.hrController.departments.lastObject.manager;
+    NSArray *employees1 = [self.hrController valueForKeyPath:@"departments.@distinctUnionOfArrays.employees"];
+    NSLog(@"Employees1: %@",employees1);
+    NSArray *employees2 = [self.hrController valueForKeyPath:@"departments.@distinctUnionOfArrays.employees"];
+    NSLog(@"Employees2: %@",employees2);
+    
+
+
     // Dynamic method call - look up methods and call them via a NSString name
     // NSString *name2 = [craig valueForKey:@"firstName"]; // No build issues, CRASHES at runtime!
     NSString *name2 = [craig valueForKey:@"privateName"]; // No build issues, accesses a private property
 //    NSString *name2 = [craig valueForKey:@"name"];
     NSLog(@"Name: %@", name2);
-    
+
     [craig setValue:@"Bob" forKey:@"name"];
     NSLog(@"Name change: %@", craig.name); // craig.name (property accessor)
-    
+
     // 1. Spelling is very important when using keys (Crash at runtime)
     // 2. Types must match or it'll crash
-    
+
     [craig setValue:@42 forKey:@"name"]; // Converted NSNumber to NSString and set it
     NSLog(@"Name change: %@", craig.name);
-    
+
     // Collections and Keypaths
-    
+
 //    NSLog(@"Departments1: %@", [[self hrController] departments]); // method calling
 //    NSLog(@"Departments2: %@", self.hrController.departments); // dot syntax
-    
+
     // keypath: departments
-    
+
     NSLog(@"Departments3a: %@", [self.hrController valueForKeyPath:@"departments"]); // dot syntax
     NSLog(@"Departments3b: %@", [self.hrController valueForKey:@"departments"]); // this works with valueForKey because it doesn't go deeper
-    
+
     // Traversing the objects (going deeper)
     NSLog(@"Department Name: %@", [self.hrController valueForKeyPath:@"departments.name"]); // dot syntax
 //    NSLog(@"Department Name: %@", [self.hrController valueForKey:@"departments.name"]); // CRASH because it can't drill down to the name using valueForKey
-    
+
     // like a .map to aggregate all the department employee arrays into a big array of arrays
     // [[Employee]]
     NSLog(@"Department Employees: %@", [self.hrController valueForKeyPath:@"departments.employees"]);
-    
+
     // Collection Operators
     // Goal: [Employee]
     // @distinctUnionOfArrays = unique values
     NSLog(@"Department Employees: %@", [self.hrController valueForKeyPath:@"departments.@distinctUnionOfArrays.employees"]);
-    
+
     NSArray<LSIEmployee *> *allEmployees = [self.hrController valueForKeyPath:@"departments.@distinctUnionOfArrays.employees"];
     NSLog(@"Department Employees: %@", allEmployees);
-    
+
     NSLog(@"Salaries: %@", [allEmployees valueForKeyPath:@"salary"]);
     NSLog(@"Max Salary: %@", [allEmployees valueForKeyPath:@"@max.salary"]);
-    
+
     // Print another collection opeartor on the allEmployees
     NSLog(@"Avg Salary: %@", [allEmployees valueForKeyPath:@"@avg.salary"]);
     NSLog(@"Count Salaries: %@", [allEmployees valueForKeyPath:@"@count.salary"]);
-    
+
     // Count the number of employees
     NSLog(@"Count Employees: %@", [allEmployees valueForKeyPath:@"@count"]);
+    
+    [marketing setValue:@"John" forKey:@"manager.name"];
+    NSString *managersName = [marketing valueForKeyPath:@"manager.name"];
+    NSLog(@"Manager's name: %@", managersName);
 }
 
 
