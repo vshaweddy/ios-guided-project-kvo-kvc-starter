@@ -11,6 +11,8 @@
 
 
 // TODO: Create a KVOContext to identify the StopWatch observer
+// void can be general pointer
+void *KVOContext = &KVOContext;
 
 // KVO = Key Value Observing
 // Listen for changes on a property
@@ -82,12 +84,31 @@
         
         // didSet
 		// TODO: Setup KVO - Add Observers
+        [_stopwatch addObserver:self forKeyPath:@"running" options:0 context:KVOContext];
+        [_stopwatch addObserver:self forKeyPath:@"elapsedTime" options:0 context:KVOContext];
     }
     
 }
 
 
 // TODO: Review docs and implement observerValueForKeyPath
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if (context == KVOContext) {
+        if ([keyPath isEqualToString:@"running"]) {
+            NSLog(@"Update the UI! Running %@", (self.stopwatch.running ? @"YES" : @"NO"));
+            [self updateViews];
+        } else if ([keyPath isEqualToString:@"elapsedTime"]) {
+            NSLog(@"Update the UI! Elapsed Time %@.2fs", self.stopwatch.elapsedTime);
+            [self updateViews];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
 
 
 - (void)dealloc {
