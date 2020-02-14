@@ -74,6 +74,7 @@ void *KVOContext = &KVOContext;
 }
 
 - (void)setStopwatch:(LSIStopWatch *)stopwatch {
+    // If you pause/start the timer it will keep track of the original time so it doesm't reset to 0 each time
     
     if (stopwatch != _stopwatch) {
         
@@ -83,7 +84,10 @@ void *KVOContext = &KVOContext;
             [_stopwatch removeObserver:self forKeyPath:@"elapsedTime" context:KVOContext];
         }
 
+        // following key coding compliances to add willChangeValueForKey and didChangeValueForKey
+        [self willChangeValueForKey:@"stopwatch"];
         _stopwatch = stopwatch;
+        [self didChangeValueForKey:@"stopwatch"];
         
         // didSet
 		// TODO: Setup KVO - Add Observers
@@ -94,7 +98,7 @@ void *KVOContext = &KVOContext;
 }
 
 
-// TODO: Review docs and implement observerValueForKeyPath
+// Review docs and implement observerValueForKeyPath
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -115,7 +119,7 @@ void *KVOContext = &KVOContext;
 
 
 - (void)dealloc {
-	// TODO: Stop observing KVO (otherwise it will crash randomly)
+	// Stop observing KVO (otherwise it will crash randomly)
     self.stopwatch = nil;
 }
 
