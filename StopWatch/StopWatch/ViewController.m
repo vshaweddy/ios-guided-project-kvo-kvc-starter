@@ -36,6 +36,7 @@ void *KVOContext = &KVOContext;
     // Do any additional setup after loading the view.
     
     self.stopwatch = [[LSIStopWatch alloc] init];
+//    [[self setStopwatch:[LSIStopWatch alloc] init]]; // similar with the above
 	[self.timeLabel setFont:[UIFont monospacedDigitSystemFontOfSize: self.timeLabel.font.pointSize  weight:UIFontWeightMedium]];
 }
 
