@@ -78,7 +78,10 @@ void *KVOContext = &KVOContext;
     if (stopwatch != _stopwatch) {
         
         // willSet
-		// TODO: Cleanup KVO - Remove Observers
+        if (_stopwatch) {
+            [_stopwatch removeObserver:self forKeyPath:@"running" context:KVOContext];
+            [_stopwatch removeObserver:self forKeyPath:@"elapsedTime" context:KVOContext];
+        }
 
         _stopwatch = stopwatch;
         
@@ -102,7 +105,7 @@ void *KVOContext = &KVOContext;
             NSLog(@"Update the UI! Running %@", (self.stopwatch.running ? @"YES" : @"NO"));
             [self updateViews];
         } else if ([keyPath isEqualToString:@"elapsedTime"]) {
-            NSLog(@"Update the UI! Elapsed Time %@.2fs", self.stopwatch.elapsedTime);
+            NSLog(@"Update the UI! Elapsed Time %.2fs", self.stopwatch.elapsedTime);
             [self updateViews];
         }
     } else {
@@ -113,7 +116,7 @@ void *KVOContext = &KVOContext;
 
 - (void)dealloc {
 	// TODO: Stop observing KVO (otherwise it will crash randomly)
-    
+    self.stopwatch = nil;
 }
 
 @end
