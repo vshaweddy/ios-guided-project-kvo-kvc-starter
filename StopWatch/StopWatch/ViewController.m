@@ -12,6 +12,11 @@
 
 // TODO: Create a KVOContext to identify the StopWatch observer
 
+// KVO = Key Value Observing
+// Listen for changes on a property
+// Similar to Notification Center
+// Delegate Pattern
+
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
