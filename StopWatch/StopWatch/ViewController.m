@@ -79,8 +79,11 @@ void *KVOContext = &KVOContext; // 0x123 == 291 // just a number
         
         // willSet
 		// TODO: Cleanup KVO - Remove Observers
+        
+        [_stopwatch removeObserver:self forKeyPath:@"running" context:KVOContext];
+        [_stopwatch removeObserver:self forKeyPath:@"elapsedTime" context:KVOContext];
 
-        _stopwatch = stopwatch;
+        _stopwatch = stopwatch; // Required in Objective-C
         
         // didSet
 		// Setup KVO - Add Observers
@@ -91,7 +94,7 @@ void *KVOContext = &KVOContext; // 0x123 == 291 // just a number
 }
 
 
-// TODO: Review docs and implement observerValueForKeyPath
+// Review docs and implement observerValueForKeyPath
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
